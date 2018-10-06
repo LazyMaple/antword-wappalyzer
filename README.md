@@ -8,7 +8,7 @@
 
 - [x] 初始化
 - [x] header指纹
-- [ ] js variable 指纹
+- [ ] js variable 指纹
 - [ ] cookie指纹
 - [ ] html meta/content指纹
 - [ ] script 指纹  
