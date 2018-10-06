@@ -1,0 +1,17 @@
+{
+    "name": "AntSword-Wappalyzer",
+    "name_en": "AntSword-Wappalyzer",
+    "main": "index.js",
+    "icon": "map-pin",
+    "version": "0.0.0",
+    "description": "Identify web technologies",
+    "description_en": "Identify web technologies",
+    "author": {
+        "name": "map1e",
+        "email": "maple_LSR@foxmail.com"
+    },
+    "category": "信息获取",
+    "category_en": "",
+    "multiple": true,
+    "scripts": ["php", "asp", "aspx", "custom"]
+}
