@@ -5,17 +5,13 @@ module.exports = {
     cella: {
         title: "目标设置",
         start: "开始扫描",
-        form: {
-            ip: "IP 地址",
-            ports: "端口列表"
-        }
     },
     cellb: {
         title: "扫描结果",
         grid: {
-            ip: "IP 地址",
-            port: "端口",
-            status: "状态"
+            name: "指纹名称",
+            fingerprint: "命中指纹",
+            confidenceTotal: "可信度"
         }
     }
 }

@@ -8,12 +8,12 @@
 
 - [x] 初始化
 - [x] header指纹
-- [ ] js variable 指纹
+- [ ] js variable 指纹
 - [x] cookie指纹
 - [x] html meta 指纹
 - [x] html content指纹
 - [x] script 指纹  
-- [ ] 结果输出
+- [ ] 界面美化
 
 
 ## 安装

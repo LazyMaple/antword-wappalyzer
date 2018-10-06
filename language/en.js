@@ -5,17 +5,13 @@ module.exports = {
     cella: {
         title: "Target",
         start: "Start",
-        form: {
-            ip: "IP",
-            ports: "Ports"
-        }
     },
     cellb: {
         title: "Result",
         grid: {
-            ip: "IP",
-            port: "Port",
-            status: "Status"
+            name: "name",
+            fingerprint: "fingerprint",
+            confidenceTotal: "confidenceTotal"
         }
     }
 }

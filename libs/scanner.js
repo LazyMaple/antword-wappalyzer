@@ -40,7 +40,7 @@ class Scanner {
       });
       req.end();
     }
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
       const {
         BrowserWindow
       } = antSword.remote
@@ -49,7 +49,7 @@ class Scanner {
         height: 600,
         show: false
       })
-      win.loadURL('http://www.browsercms.org/')
+      win.loadURL('http://www.baidu.com/')
       const webContents = win.webContents;
       webContents.on('did-finish-load', (event) => {
         // 页面加载完成
@@ -75,11 +75,10 @@ class Scanner {
               html: this.html,
               scripts: this.scripts,
               headers: this.headers
-            }).then(res => {
-              console.log(res)
-              console.log(this.wappalyzer)
+            }).then(() => {
+              win.close()
+              resolve(this.wappalyzer)
             })
-            win.close()
           })
         })
 

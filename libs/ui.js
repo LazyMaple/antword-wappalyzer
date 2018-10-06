@@ -31,15 +31,13 @@ class UI {
     let layout = this.win.win.attachLayout('2E');
     // 扫描输入
     layout.cells('a').hideHeader();
+    layout.cells('a').setHeight(32)
     layout.cells('a').setText(`<i class="fa fa-cogs"></i> ${LANG['cella']['title']}`);
     // 扫描结果
     layout.cells('b').setText(`<i class="fa fa-bars"></i> ${LANG['cellb']['title']}`);
-    layout.cells('b').collapse();
 
     // 创建toolbar
     this.createToolbar(layout.cells('a'));
-    // 创建form
-    this.createForm(layout.cells('a'));
     // 创建grid
     this.createGrid(layout.cells('b'));
 
@@ -73,10 +71,6 @@ class UI {
       position: 'label-left',
       labelWidth: 150,
       inputWidth: 200
-    }, {
-      type: 'block',
-      inputWidth: 'auto',
-      offsetTop: 12,
     }];
     let form = cell.attachForm(formdata, true);
     form.enableLiveValidation(true);
@@ -91,12 +85,12 @@ class UI {
   createGrid(cell) {
     let grid = cell.attachGrid();
     grid.setHeader(`
-      ${LANG['cellb']['grid']['ip']},
-      ${LANG['cellb']['grid']['port']},
-      ${LANG['cellb']['grid']['status']}
+      ${LANG['cellb']['grid']['name']},
+      ${LANG['cellb']['grid']['fingerprint']},
+      ${LANG['cellb']['grid']['confidenceTotal']}
     `);
     grid.setColTypes("ro,ro,ro");
-    grid.setColSorting('str,int,str');
+    grid.setColSorting('str,str,str');
     grid.setInitWidths("150,100,*");
     grid.setColAlign("left,left,center");
     grid.enableMultiselect(true);
@@ -118,31 +112,25 @@ class UI {
           // 加载中
           this.win.win.progressOn();
           // 获取FORM表单
-          let formvals = this.form.getValues();
+          // let formvals = this.form.getValues();
           // 传递给扫描核心代码
-          callback({
-              ip: formvals['scanip'],
-            }).then((ret) => {
-              console.log(9090)
+          callback({}).then((ret) => {
               console.log(ret)
-              // // 解析扫描结果
-              // let griddata = [];
-              // ret.text.split('\n').map((item, i) => {
-              //   if (!item) { return };
-              //   griddata.push({
-              //     id: i,
-              //     style: item.indexOf('Open') > -1 ? "background-color:#ADF1B9": "",
-              //     data: item.split('\t')
-              //   });
-              // });
-              // // 渲染UI
-              // this.grid.clearAll();
-              // this.grid.parse({
-              //   rows: griddata
-              // }, "json");
-              // this.layout.cells('a').collapse();
-              // this.layout.cells('b').expand();
-              // toastr.success(LANG['success'], antSword['language']['toastr']['success']);
+              let griddata = [];
+              let index = 0;
+              for (let item in ret.apps) {
+                griddata.push({
+                  id: index,
+                  data: [item, JSON.stringify(ret.apps[item].confidence), ret.apps[item].confidenceTotal]
+                })
+                index++;
+              }
+              // 渲染UI
+              this.grid.clearAll();
+              this.grid.parse({
+                rows: griddata
+              }, "json");
+              toastr.success(LANG['success'], antSword['language']['toastr']['success']);
               // 取消锁定LOADING
               this.win.win.progressOff();
             })
