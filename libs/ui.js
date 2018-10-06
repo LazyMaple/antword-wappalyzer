@@ -77,14 +77,6 @@ class UI {
       type: 'block',
       inputWidth: 'auto',
       offsetTop: 12,
-      list: [{
-        type: 'input',
-        label: LANG['cella']['form']['ip'],
-        name: 'scanip',
-        required: true,
-        validate: "NotEmpty",
-        value: '127.0.0.1'
-      }]
     }];
     let form = cell.attachForm(formdata, true);
     form.enableLiveValidation(true);

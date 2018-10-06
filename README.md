@@ -8,10 +8,13 @@
 
 - [x] 初始化
 - [x] header指纹
-- [ ] js variable 指纹
-- [ ] cookie指纹
-- [ ] html meta/content指纹
-- [ ] script 指纹  
+- [ ] js variable 指纹
+- [x] cookie指纹
+- [x] html meta 指纹
+- [x] html content指纹
+- [x] script 指纹  
+- [ ] 结果输出
+
 
 ## 安装
 
@@ -25,3 +28,4 @@
 
 * [AntSword 文档](http://doc.uyu.us)
 * [dhtmlx 文档](http://docs.dhtmlx.com/)
+* [wappalyzer](https://github.com/AliasIO/Wappalyzer/)

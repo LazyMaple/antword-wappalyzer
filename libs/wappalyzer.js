@@ -31,7 +31,6 @@ function asyncForEach(iterable, iterator) {
  */
 function addDetected(app, pattern, type, value, key) {
     app.detected = true;
-    console.log(arguments)
     // Set confidence level
     app.confidence[`${type} ${key ? `${key} ` : ''}${pattern.regex}`] = pattern.confidence === undefined ? 100 : parseInt(pattern.confidence, 10);
 
@@ -126,8 +125,6 @@ class Wappalyzer {
         this.driver = {};
         this.jsPatterns = {};
         this.detected = {};
-        this.hostnameCache = {};
-        this.adCache = [];
 
         this.config = {
             websiteURL: 'https://www.wappalyzer.com/',
@@ -170,7 +167,6 @@ class Wappalyzer {
 
         if (html) {
             if (typeof html !== 'string') {
-                console.log('not string')
                 html = '';
             }
 
@@ -236,22 +232,12 @@ class Wappalyzer {
                     if (Object.keys(apps).length) {
                         this.log(`Identified ${Object.keys(apps).join(', ')} (${url.hostname})`, 'core');
                     }
-
-                    this.driver.displayApps(this.detected[url.canonical], {
-                        language
-                    }, context);
-
+                    this.apps = apps
                     return resolve();
                 });
         });
     }
 
-    /**
-     * Cache detected ads
-     */
-    cacheDetectedAds(ad) {
-        this.adCache.push(ad);
-    }
 
     /**
      *
@@ -311,23 +297,6 @@ class Wappalyzer {
         });
 
         return disallow;
-    }
-
-    /**
-     *
-     */
-    ping() {
-        if (Object.keys(this.hostnameCache).length > 100) {
-            this.driver.ping(this.hostnameCache);
-
-            this.hostnameCache = {};
-        }
-
-        if (this.adCache.length > 50) {
-            this.driver.ping({}, this.adCache);
-
-            this.adCache = [];
-        }
     }
 
     /**
@@ -503,7 +472,6 @@ class Wappalyzer {
         if (!app.props.meta) {
             return Promise.resolve();
         }
-
         let matches;
 
         do {
@@ -512,7 +480,6 @@ class Wappalyzer {
             if (!matches) {
                 break;
             }
-
             const [match] = matches;
 
             Object.keys(patterns).forEach((meta) => {
@@ -520,7 +487,6 @@ class Wappalyzer {
 
                 if (r.test(match)) {
                     const content = match.match(/content=("|')([^"']+)("|')/i);
-
                     promises.push(asyncForEach(patterns[meta], (pattern) => {
                         if (content && content.length === 4 && pattern.regex.test(content[2])) {
                             addDetected(app, pattern, 'meta', content[2], meta);
@@ -572,7 +538,6 @@ class Wappalyzer {
 
                 promises.push(asyncForEach(patterns[cookieName], (pattern) => {
                     const cookie = cookies.find(_cookie => _cookie.name.toLowerCase() === cookieNameLower);
-
                     if (cookie && pattern.regex.test(cookie.value)) {
                         addDetected(app, pattern, 'cookies', cookie.value, cookieName);
                     }

@@ -47,9 +47,9 @@ class Scanner {
       let win = new BrowserWindow({
         width: 800,
         height: 600,
-        // show: false
+        show: false
       })
-      win.loadURL('https://github.com')
+      win.loadURL('http://www.browsercms.org/')
       const webContents = win.webContents;
       webContents.on('did-finish-load', (event) => {
         // 页面加载完成
@@ -65,7 +65,11 @@ class Scanner {
             this.scripts = res.scripts
             // console.log(Object.keys(this.headers))
             this.wappalyzer = new wappalyzer();
-            this.wappalyzerScanner();
+            const json = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/apps.json')));
+            this.wappalyzer.apps = json.apps;
+            this.wappalyzer.categories = json.categories;
+            this.wappalyzer.parseJsPatterns();
+            this.wappalyzer.driver.log = (message, source, type) => console.log(message, source);
             this.wappalyzer.analyze(url.parse('https://github.com'), {
               cookies: this.cookies,
               html: this.html,
