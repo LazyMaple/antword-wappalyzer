@@ -11,7 +11,9 @@ module.exports = {
         grid: {
             name: "指纹名称",
             fingerprint: "命中指纹",
-            confidenceTotal: "可信度"
+            confidenceTotal: "可信度",
+            version: "版本",
+            category: "分类"
         }
     }
 }

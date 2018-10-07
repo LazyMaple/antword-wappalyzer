@@ -43,14 +43,16 @@ class Scanner {
     return new Promise((resolve, reject) => {
       const {
         BrowserWindow
-      } = antSword.remote
+      } = antSword.remote;
       let win = new BrowserWindow({
         width: 800,
         height: 600,
         show: false
-      })
-      win.loadURL('http://www.baidu.com/')
+      });
       const webContents = win.webContents;
+      // TODO：close ui window时候关闭scanner window
+      win.loadURL(opt.url)
+
       webContents.on('did-finish-load', (event) => {
         // 页面加载完成
         console.log('event load finished')
@@ -63,14 +65,13 @@ class Scanner {
             `, true, (res) => {
             this.html = res.html;
             this.scripts = res.scripts
-            // console.log(Object.keys(this.headers))
             this.wappalyzer = new wappalyzer();
             const json = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/apps.json')));
             this.wappalyzer.apps = json.apps;
             this.wappalyzer.categories = json.categories;
             this.wappalyzer.parseJsPatterns();
             this.wappalyzer.driver.log = (message, source, type) => console.log(message, source);
-            this.wappalyzer.analyze(url.parse('https://github.com'), {
+            this.wappalyzer.analyze(url.parse(opt.url), {
               cookies: this.cookies,
               html: this.html,
               scripts: this.scripts,
@@ -83,28 +84,16 @@ class Scanner {
         })
 
       })
-      webContents.on('did-fail-load', (event, errorCode, errorDescription, validateURL) => {
+      webContents.on('did-fail-load', (...args) => {
         // 加载失败
-        console.log(event, errorCode, errorDescription, validateURL)
-        win.close()
+        console.error(args);
+        win.close();
+        reject(args[2])
       })
       webContents.once('did-get-response-details', (...args) => {
         this.headers = args[7];
       })
     })
-  }
-
-  /**
-   * 
-   */
-  wappalyzerScanner() {
-    const json = JSON.parse(fs.readFileSync(path.resolve(__dirname + '/apps.json')));
-    this.wappalyzer.apps = json.apps;
-    this.wappalyzer.categories = json.categories;
-    this.wappalyzer.parseJsPatterns();
-    this.wappalyzer.driver.log = (message, source, type) => console.log(message, source);
-    this.wappalyzer.driver.displayApps = (detected, meta, context) => console.log(detected, meta, context);
-
   }
 
   /**

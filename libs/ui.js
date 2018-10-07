@@ -12,7 +12,7 @@ class UI {
       title: `${LANG['title']} - ${opt['url']}`,
       // 作为一名代码洁癖患者，我连尺寸的Number都要求有意义，嗯。
       height: 444,
-      width: 520,
+      width: 700,
     });
     this.createMainLayout();
     return {
@@ -87,12 +87,14 @@ class UI {
     grid.setHeader(`
       ${LANG['cellb']['grid']['name']},
       ${LANG['cellb']['grid']['fingerprint']},
+      ${LANG['cellb']['grid']['category']},
+      ${LANG['cellb']['grid']['version']},
       ${LANG['cellb']['grid']['confidenceTotal']}
     `);
-    grid.setColTypes("ro,ro,ro");
-    grid.setColSorting('str,str,str');
-    grid.setInitWidths("150,100,*");
-    grid.setColAlign("left,left,center");
+    grid.setColTypes("ro,ro,ro,ro,ro");
+    grid.setColSorting('str,str,str,str,str');
+    grid.setInitWidths("110,*,150,60,80");
+    grid.setColAlign("left,left,left,left,center");
     grid.enableMultiselect(true);
     grid.init();
 
@@ -111,8 +113,6 @@ class UI {
           // 开始扫描
           // 加载中
           this.win.win.progressOn();
-          // 获取FORM表单
-          // let formvals = this.form.getValues();
           // 传递给扫描核心代码
           callback({}).then((ret) => {
               console.log(ret)
@@ -121,7 +121,7 @@ class UI {
               for (let item in ret.apps) {
                 griddata.push({
                   id: index,
-                  data: [item, JSON.stringify(ret.apps[item].confidence), ret.apps[item].confidenceTotal]
+                  data: [item, JSON.stringify(ret.apps[item].confidence), ret.categories[ret.apps[item].props.cats[0]].name, ret.apps[item].version || 'None', ret.apps[item].confidenceTotal]
                 })
                 index++;
               }
@@ -135,7 +135,7 @@ class UI {
               this.win.win.progressOff();
             })
             .catch((err) => {
-              console.log(err)
+              console.error(err)
               toastr.error(LANG['error'], antSword['language']['toastr']['error']);
               this.win.win.progressOff();
             });

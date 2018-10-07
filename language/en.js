@@ -11,7 +11,9 @@ module.exports = {
         grid: {
             name: "name",
             fingerprint: "fingerprint",
-            confidenceTotal: "confidenceTotal"
+            confidenceTotal: "confidenceTotal",
+            version: "version",
+            category: "category"
         }
     }
 }

@@ -2,7 +2,7 @@
 
 const languages = {
   'en': 'English',
-  'zh': '简体中文'
+  'zh-CN': '简体中文'
 }
 
 // 获取本地设置语言（如若没有，则获取浏览器语言
